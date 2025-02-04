@@ -2,7 +2,7 @@
 
 Snatch is part or the Kyma Infrastructure Manager (KIM) and responsible to assign Kyma workloads to the Kyma owned worker pool. This document describes it's architecture and relevant technical flows.
 
-![Snatch Architecture](./assets/architecture-webook.svg)
+![Snatch Architecture](./assets/architecture-webhook.svg)
 
 
 1) Gardener cert-manager issues a CA, TLS key and certificate. It stores them as entries in a Kubernetes Secret.
