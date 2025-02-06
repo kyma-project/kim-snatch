@@ -74,6 +74,7 @@ jobs:
       - name: Running Test e2e
         run: |
           go mod tidy
+          set -o pipefail
           make test-e2e | tee test.log
 
       - name: Generate summary
