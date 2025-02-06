@@ -17,9 +17,9 @@ spec:
           protocol: TCP
         volumeMounts:
           - mountPath: "/tmp"
-            name: snatch-certificates
+            name: kim-snatch-certificates
             readOnly: true
       volumes:
-      - name: snatch-certificates
+      - name: kim-snatch-certificates
         secret:
-          secretName: snatch-certificates
+          secretName: kim-snatch-certificates

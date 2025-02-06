@@ -17,5 +17,5 @@ spec:
     name: kyma
     namespace: system
   secretRef:
-    name: snatch-certificates
+    name: kim-snatch-certificates
     namespace: system
