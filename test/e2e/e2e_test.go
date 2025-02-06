@@ -34,10 +34,10 @@ import (
 const namespace = "kyma-system"
 
 // serviceAccountName created for the project
-const serviceAccountName = "snatch-controller-manager"
+const serviceAccountName = "kim-snatch-controller-manager"
 
 // metricsServiceName is the name of the metrics service of the project
-const metricsServiceName = "snatch-controller-manager-metrics-service"
+const metricsServiceName = "kim-snatch-controller-manager-metrics-service"
 
 // metricsRoleBindingName is the name of the RBAC that will be created to allow get the metrics data
 const metricsRoleBindingName = "kim-snatch-metrics-binding"
@@ -45,7 +45,7 @@ const metricsRoleBindingName = "kim-snatch-metrics-binding"
 // path to simple pod definition
 const simplePod = "./test/e2e/resources/simple-pod.yaml"
 
-const testNodeKymaLabelValue = "snatch-test"
+const testNodeKymaLabelValue = "kim-snatch-test"
 
 const testNodeName = "k3d-k3s-default-server-0"
 
@@ -195,17 +195,12 @@ var _ = Describe("Manager", Ordered, func() {
 			_, err = utils.Run(cmd)
 			Expect(err).NotTo(HaveOccurred(), "ServiceMonitor should exist")
 
-			By("getting the service account token")
-			token, err := serviceAccountToken()
-			Expect(err).NotTo(HaveOccurred())
-			Expect(token).NotTo(BeEmpty())
-
 			By("waiting for the metrics endpoint to be ready")
 			verifyMetricsEndpointReady := func(g Gomega) {
 				cmd := exec.Command("kubectl", "get", "endpoints", metricsServiceName, "-n", namespace)
 				output, err := utils.Run(cmd)
 				g.Expect(err).NotTo(HaveOccurred())
-				g.Expect(output).To(ContainSubstring("8443"), "Metrics endpoint is not ready")
+				g.Expect(output).To(ContainSubstring("8080"), "Metrics endpoint is not ready")
 			}
 			Eventually(verifyMetricsEndpointReady).Should(Succeed())
 
@@ -224,8 +219,8 @@ var _ = Describe("Manager", Ordered, func() {
 				"--namespace", namespace,
 				"--image=curlimages/curl:7.78.0",
 				"--", "/bin/sh", "-c", fmt.Sprintf(
-					"curl -v -k -H 'Authorization: Bearer %s' https://%s.%s.svc.cluster.local:8443/metrics",
-					token, metricsServiceName, namespace))
+					"curl -v http://%s.%s.svc.cluster.local:8080/metrics",
+					metricsServiceName, namespace))
 			_, err = utils.Run(cmd)
 			Expect(err).NotTo(HaveOccurred(), "Failed to create curl-metrics pod")
 
@@ -262,7 +257,7 @@ var _ = Describe("Manager", Ordered, func() {
 			verifyCAInjection := func(g Gomega) {
 				cmd := exec.Command("kubectl", "get",
 					"mutatingwebhookconfigurations.admissionregistration.k8s.io",
-					"snatch-mutating-webhook-configuration",
+					"kim-snatch-mutating-webhook-configuration",
 					"-o", "go-template={{ range .webhooks }}{{ .clientConfig.caBundle }}{{ end }}")
 				mwhOutput, err := utils.Run(cmd)
 				g.Expect(err).NotTo(HaveOccurred())
@@ -318,7 +313,7 @@ var _ = Describe("Manager", Ordered, func() {
 			verifyCAInjection := func(g Gomega) {
 				cmd := exec.Command("kubectl", "get",
 					"mutatingwebhookconfigurations.admissionregistration.k8s.io",
-					"snatch-mutating-webhook-configuration",
+					"kim-snatch-mutating-webhook-configuration",
 					"-o", "go-template={{(index .webhooks 0).clientConfig.caBundle}}")
 				mwhOutput, err := utils.Run(cmd)
 				g.Expect(err).NotTo(HaveOccurred())
