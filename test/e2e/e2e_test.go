@@ -242,7 +242,7 @@ var _ = Describe("Manager", Ordered, func() {
 		It("should provisioned cert-manager", func() {
 			By("validating that cert-manager has the certificate Secret")
 			verifyCertManager := func(g Gomega) {
-				cmd := exec.Command("kubectl", "get", "secrets", "snatch-certificates", "-n", namespace)
+				cmd := exec.Command("kubectl", "get", "secrets", "kim-snatch-certificates", "-n", namespace)
 				_, err := utils.Run(cmd)
 				g.Expect(err).NotTo(HaveOccurred())
 			}
@@ -278,7 +278,7 @@ var _ = Describe("Manager", Ordered, func() {
 			deleteCertificateSecret := func(g Gomega) {
 				cmd := exec.Command("kubectl", "delete",
 					"secret", "-n", namespace,
-					"snatch-certificates")
+					"kim-snatch-certificates")
 				_, err := utils.Run(cmd)
 				g.Expect(err).NotTo(HaveOccurred())
 			}
@@ -295,7 +295,7 @@ var _ = Describe("Manager", Ordered, func() {
 			By("fetch new CA Bundle from certificate secret")
 			var newCABundle string
 			waitSecretCreated := func(g Gomega) {
-				cmd := exec.Command("kubectl", "get", "secret", "snatch-certificates", "-n", namespace,
+				cmd := exec.Command("kubectl", "get", "secret", "kim-snatch-certificates", "-n", namespace,
 					"-o", `go-template={{index .data "ca.crt"}}`)
 
 				var err error
