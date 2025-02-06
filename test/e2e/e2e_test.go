@@ -268,7 +268,7 @@ var _ = Describe("Manager", Ordered, func() {
 			deleteCertificate := func(g Gomega) {
 				cmd := exec.Command("kubectl", "delete",
 					"certificates.cert-manager.io",
-					"-n", namespace, "snatch-kyma")
+					"-n", namespace, "kim-snatch-kyma")
 				_, err := utils.Run(cmd)
 				g.Expect(err).NotTo(HaveOccurred())
 			}
