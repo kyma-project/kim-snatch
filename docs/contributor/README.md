@@ -31,7 +31,7 @@ KIM Snatch is part of Kyma Infrastructure Manager (KIM), which is responsible fo
 
 ## How It Works
 
-The activity diagram describes the internal technical process of Snatch more fine-grained:
+The activity diagram describes the internal technical process of KIM Snatch in more detail.
 
 ![Flow](./assets/flow-snatch.svg)
 
