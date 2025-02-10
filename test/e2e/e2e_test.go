@@ -17,11 +17,8 @@ limitations under the License.
 package e2e
 
 import (
-	"encoding/json"
 	"fmt"
-	"os"
 	"os/exec"
-	"path/filepath"
 	"time"
 
 	. "github.com/onsi/ginkgo/v2"
@@ -34,10 +31,10 @@ import (
 const namespace = "kyma-system"
 
 // serviceAccountName created for the project
-const serviceAccountName = "snatch-controller-manager"
+const serviceAccountName = "kim-snatch-controller-manager"
 
 // metricsServiceName is the name of the metrics service of the project
-const metricsServiceName = "snatch-controller-manager-metrics-service"
+const metricsServiceName = "kim-snatch-controller-manager-metrics-service"
 
 // metricsRoleBindingName is the name of the RBAC that will be created to allow get the metrics data
 const metricsRoleBindingName = "kim-snatch-metrics-binding"
@@ -45,7 +42,7 @@ const metricsRoleBindingName = "kim-snatch-metrics-binding"
 // path to simple pod definition
 const simplePod = "./test/e2e/resources/simple-pod.yaml"
 
-const testNodeKymaLabelValue = "snatch-test"
+const testNodeKymaLabelValue = "kim-snatch-test"
 
 const testNodeName = "k3d-k3s-default-server-0"
 
@@ -103,7 +100,7 @@ var _ = Describe("Manager", Ordered, func() {
 		specReport := CurrentSpecReport()
 		if specReport.Failed() {
 			By("Fetching controller manager pod logs")
-			cmd := exec.Command("kubectl", "logs", controllerPodName, "-n", namespace, "--ignore-not-found=true")
+			cmd := exec.Command("kubectl", "logs", controllerPodName, "-n", namespace)
 			controllerLogs, err := utils.Run(cmd)
 			if err == nil {
 				_, _ = fmt.Fprintf(GinkgoWriter, "Controller logs:\n %s", controllerLogs)
@@ -195,17 +192,12 @@ var _ = Describe("Manager", Ordered, func() {
 			_, err = utils.Run(cmd)
 			Expect(err).NotTo(HaveOccurred(), "ServiceMonitor should exist")
 
-			By("getting the service account token")
-			token, err := serviceAccountToken()
-			Expect(err).NotTo(HaveOccurred())
-			Expect(token).NotTo(BeEmpty())
-
 			By("waiting for the metrics endpoint to be ready")
 			verifyMetricsEndpointReady := func(g Gomega) {
 				cmd := exec.Command("kubectl", "get", "endpoints", metricsServiceName, "-n", namespace)
 				output, err := utils.Run(cmd)
 				g.Expect(err).NotTo(HaveOccurred())
-				g.Expect(output).To(ContainSubstring("8443"), "Metrics endpoint is not ready")
+				g.Expect(output).To(ContainSubstring("8080"), "Metrics endpoint is not ready")
 			}
 			Eventually(verifyMetricsEndpointReady).Should(Succeed())
 
@@ -224,8 +216,8 @@ var _ = Describe("Manager", Ordered, func() {
 				"--namespace", namespace,
 				"--image=curlimages/curl:7.78.0",
 				"--", "/bin/sh", "-c", fmt.Sprintf(
-					"curl -v -k -H 'Authorization: Bearer %s' https://%s.%s.svc.cluster.local:8443/metrics",
-					token, metricsServiceName, namespace))
+					"curl -v http://%s.%s.svc.cluster.local:8080/metrics",
+					metricsServiceName, namespace))
 			_, err = utils.Run(cmd)
 			Expect(err).NotTo(HaveOccurred(), "Failed to create curl-metrics pod")
 
@@ -250,7 +242,7 @@ var _ = Describe("Manager", Ordered, func() {
 		It("should provisioned cert-manager", func() {
 			By("validating that cert-manager has the certificate Secret")
 			verifyCertManager := func(g Gomega) {
-				cmd := exec.Command("kubectl", "get", "secrets", "snatch-certificates", "-n", namespace)
+				cmd := exec.Command("kubectl", "get", "secrets", "kim-snatch-certificates", "-n", namespace)
 				_, err := utils.Run(cmd)
 				g.Expect(err).NotTo(HaveOccurred())
 			}
@@ -262,7 +254,7 @@ var _ = Describe("Manager", Ordered, func() {
 			verifyCAInjection := func(g Gomega) {
 				cmd := exec.Command("kubectl", "get",
 					"mutatingwebhookconfigurations.admissionregistration.k8s.io",
-					"snatch-mutating-webhook-configuration",
+					"kim-snatch-mutating-webhook-configuration",
 					"-o", "go-template={{ range .webhooks }}{{ .clientConfig.caBundle }}{{ end }}")
 				mwhOutput, err := utils.Run(cmd)
 				g.Expect(err).NotTo(HaveOccurred())
@@ -276,7 +268,7 @@ var _ = Describe("Manager", Ordered, func() {
 			deleteCertificate := func(g Gomega) {
 				cmd := exec.Command("kubectl", "delete",
 					"certificates.cert-manager.io",
-					"-n", namespace, "snatch-kyma")
+					"-n", namespace, "kim-snatch-kyma")
 				_, err := utils.Run(cmd)
 				g.Expect(err).NotTo(HaveOccurred())
 			}
@@ -286,7 +278,7 @@ var _ = Describe("Manager", Ordered, func() {
 			deleteCertificateSecret := func(g Gomega) {
 				cmd := exec.Command("kubectl", "delete",
 					"secret", "-n", namespace,
-					"snatch-certificates")
+					"kim-snatch-certificates")
 				_, err := utils.Run(cmd)
 				g.Expect(err).NotTo(HaveOccurred())
 			}
@@ -303,7 +295,7 @@ var _ = Describe("Manager", Ordered, func() {
 			By("fetch new CA Bundle from certificate secret")
 			var newCABundle string
 			waitSecretCreated := func(g Gomega) {
-				cmd := exec.Command("kubectl", "get", "secret", "snatch-certificates", "-n", namespace,
+				cmd := exec.Command("kubectl", "get", "secret", "kim-snatch-certificates", "-n", namespace,
 					"-o", `go-template={{index .data "ca.crt"}}`)
 
 				var err error
@@ -318,7 +310,7 @@ var _ = Describe("Manager", Ordered, func() {
 			verifyCAInjection := func(g Gomega) {
 				cmd := exec.Command("kubectl", "get",
 					"mutatingwebhookconfigurations.admissionregistration.k8s.io",
-					"snatch-mutating-webhook-configuration",
+					"kim-snatch-mutating-webhook-configuration",
 					"-o", "go-template={{(index .webhooks 0).clientConfig.caBundle}}")
 				mwhOutput, err := utils.Run(cmd)
 				g.Expect(err).NotTo(HaveOccurred())
@@ -369,47 +361,6 @@ var _ = Describe("Manager", Ordered, func() {
 	})
 })
 
-// serviceAccountToken returns a token for the specified service account in the given namespace.
-// It uses the Kubernetes TokenRequest API to generate a token by directly sending a request
-// and parsing the resulting token from the API response.
-func serviceAccountToken() (string, error) {
-	const tokenRequestRawString = `{
-		"apiVersion": "authentication.k8s.io/v1",
-		"kind": "TokenRequest"
-	}`
-
-	// Temporary file to store the token request
-	secretName := fmt.Sprintf("%s-token-request", serviceAccountName)
-	tokenRequestFile := filepath.Join("/tmp", secretName)
-	err := os.WriteFile(tokenRequestFile, []byte(tokenRequestRawString), os.FileMode(0o644))
-	if err != nil {
-		return "", err
-	}
-
-	var out string
-	verifyTokenCreation := func(g Gomega) {
-		// Execute kubectl command to create the token
-		cmd := exec.Command("kubectl", "create", "--raw", fmt.Sprintf(
-			"/api/v1/namespaces/%s/serviceaccounts/%s/token",
-			namespace,
-			serviceAccountName,
-		), "-f", tokenRequestFile)
-
-		output, err := cmd.CombinedOutput()
-		g.Expect(err).NotTo(HaveOccurred())
-
-		// Parse the JSON output to extract the token
-		var token tokenRequest
-		err = json.Unmarshal(output, &token)
-		g.Expect(err).NotTo(HaveOccurred())
-
-		out = token.Status.Token
-	}
-	Eventually(verifyTokenCreation).Should(Succeed())
-
-	return out, err
-}
-
 // getMetricsOutput retrieves and returns the logs from the curl pod used to access the metrics endpoint.
 func getMetricsOutput() string {
 	By("getting the curl-metrics logs")
@@ -418,12 +369,4 @@ func getMetricsOutput() string {
 	Expect(err).NotTo(HaveOccurred(), "Failed to retrieve logs from curl pod")
 	Expect(metricsOutput).To(ContainSubstring("< HTTP/1.1 200 OK"))
 	return metricsOutput
-}
-
-// tokenRequest is a simplified representation of the Kubernetes TokenRequest API response,
-// containing only the token field that we need to extract.
-type tokenRequest struct {
-	Status struct {
-		Token string `json:"token"`
-	} `json:"status"`
 }

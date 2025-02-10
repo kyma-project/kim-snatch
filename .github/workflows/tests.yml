@@ -33,7 +33,8 @@ jobs:
 
       - name: Running Tests
         run: |
-          go mod tidy
+          go mod tidy          
+          set -o pipefail
           make test | tee test.log
 
       - name: Generate summary
@@ -74,6 +75,7 @@ jobs:
       - name: Running Test e2e
         run: |
           go mod tidy
+          set -o pipefail
           make test-e2e | tee test.log
 
       - name: Generate summary
