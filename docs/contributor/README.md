@@ -11,7 +11,7 @@ KIM Snatch is part of Kyma Infrastructure Manager (KIM), which is responsible fo
 5) Cert Watcher triggers a reload of the HTTPS server configuration. This keeps the used TLS certificates up-to-date even after they were rotated.
 6) Also the CA, used for creating the TLS certificates, is updated in the `WebhookConfiguration` by Cert Watcher.
 7) The `WebhookConfiguration` informs the Kubernetes API server about the existence of the webhook and refers to the CA. The API server uses CA to verify HTTPS connections established to the webhook.
-8) API Server calls this HTTPS endpoint of the webhook for each received HTTP request. The webhook is allowed to modify the request before it's finally processed by the API server.
+8) The API Server calls this HTTPS endpoint of the webhook for each received HTTP request. The webhook is allowed to modify the request before the API server finally processes it.
 
 
 ## Components
