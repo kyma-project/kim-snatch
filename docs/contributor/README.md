@@ -1,6 +1,6 @@
 # KIM Snatch Architecture
 
-Snatch is part or the Kyma Infrastructure Manager (KIM) and responsible to assign Kyma workloads to the Kyma owned worker pool. This document describes it's architecture and relevant technical flows.
+KIM Snatch is part of Kyma Infrastructure Manager (KIM), which is responsible for assigning Kyma workloads to the Kyma-owned worker pool. This document describes its architecture and relevant technical flows.
 
 ![Snatch Architecture](./assets/architecture-webhook.svg)
 
