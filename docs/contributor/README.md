@@ -8,7 +8,7 @@ KIM Snatch is part of Kyma Infrastructure Manager (KIM), which is responsible fo
 2) The KIM Snatch webhook mounts the Secret to make the CA, TLS key and certificate accessible through the local filesystem.
 3) A web server is started, exposing an HTTPS endpoint using the mounted TLS certificate to secure incoming connections.
 4) Changes in certificates are detected by a certificate-watching library (Cert Watcher).
-5) Cert Watcher triggers a reload the HTTPS server configuration. This keeps the used TLS certificates up-to-date even after they were rotated.
+5) Cert Watcher triggers a reload of the HTTPS server configuration. This keeps the used TLS certificates up-to-date even after they were rotated.
 6) Also the CA, used for creating the TLS certificates, is updated in the `WebhookConfiguration` by Cert Watcher.
 7) The `WebhookConfiguration` informs the Kubernetes API server about the existence of the webhook and refers to the CA. The API server uses CA to verify HTTPS connections established to the webhook.
 8) API Server calls this HTTPS endpoint of the webhook for each received HTTP request. The webhook is allowed to modify the request before it's finally processed by the API server.
