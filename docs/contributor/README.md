@@ -4,7 +4,6 @@ Snatch is part or the Kyma Infrastructure Manager (KIM) and responsible to assig
 
 ![Snatch Architecture](./assets/architecture-webhook.svg)
 
-
 1) Gardener cert-manager issues a CA, TLS key and certificate. It stores them as entries in a Kubernetes Secret.
 2) The KIM Snatch webhook mounts the Secret to make the CA, TLS key and certificate accessible through the local filesystem.
 3) A web server is started, exposing an HTTPS endpoint using the mounted TLS certificate to secure incoming connections.
