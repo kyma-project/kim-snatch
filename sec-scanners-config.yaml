@@ -1,8 +1,8 @@
 module-name: kim-snatch
-protecode:
+kind: kyma
+bdba:
   - europe-docker.pkg.dev/kyma-project/prod/kim-snatch:1.0.0
-whitesource:
+mend:
   language: golang-mod
-  subprojects: false
   exclude:
     - "**/*_test.go"
