@@ -1,4 +1,4 @@
-name: all-checks-passed
+name: All checks passed
 on:
   pull_request:
     types:
