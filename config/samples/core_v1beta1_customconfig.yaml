@@ -1,0 +1,9 @@
+apiVersion: core.kyma-project.io/v1beta1
+kind: CustomConfig
+metadata:
+  labels:
+    app.kubernetes.io/name: kim-snatch-webhook
+    app.kubernetes.io/managed-by: kustomize
+  name: customconfig-sample
+spec:
+  # TODO(user): Add fields here

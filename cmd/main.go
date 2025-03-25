@@ -20,9 +20,10 @@ import (
 	"crypto/tls"
 	"flag"
 	"fmt"
-	"github.com/kyma-project/kim-snatch/internal/metrics"
 	"os"
 	"path"
+
+	"github.com/kyma-project/kim-snatch/internal/metrics"
 
 	// Import all Kubernetes client auth plugins (e.g. Azure, GCP, OIDC, etc.)
 	// to ensure that exec-entrypoint and run can make use of them.
@@ -32,9 +33,6 @@ import (
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/util/retry"
 
-	"github.com/kyma-project/kim-snatch/internal/webhook/callback"
-	webhook "github.com/kyma-project/kim-snatch/internal/webhook/server"
-	webhookcorev1 "github.com/kyma-project/kim-snatch/internal/webhook/v1"
 	admissionregistration "k8s.io/api/admissionregistration/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
@@ -44,6 +42,11 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/healthz"
 	"sigs.k8s.io/controller-runtime/pkg/log/zap"
 	metricsserver "sigs.k8s.io/controller-runtime/pkg/metrics/server"
+
+	corev1beta1 "github.com/kyma-project/kim-snatch/api/v1beta1"
+	"github.com/kyma-project/kim-snatch/internal/webhook/callback"
+	webhook "github.com/kyma-project/kim-snatch/internal/webhook/server"
+	webhookcorev1 "github.com/kyma-project/kim-snatch/internal/webhook/v1"
 	// +kubebuilder:scaffold:imports
 )
 
@@ -68,6 +71,7 @@ func init() {
 	utilruntime.Must(clientgoscheme.AddToScheme(scheme))
 	utilruntime.Must(admissionregistration.AddToScheme(scheme))
 
+	utilruntime.Must(corev1beta1.AddToScheme(scheme))
 	// +kubebuilder:scaffold:scheme
 }
 
