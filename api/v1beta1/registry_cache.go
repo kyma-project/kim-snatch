@@ -28,6 +28,9 @@ type RegistryCache struct {
 	// Proxy contains settings for a proxy used in the registry cache.
 	// +optional
 	Proxy *Proxy `json:"proxy,omitempty"`
+
+	// HTTP contains settings for the HTTP server that hosts the registry cache.
+	HTTP *HTTP
 }
 
 // Volume contains settings for the registry cache volume.
@@ -63,8 +66,9 @@ type Proxy struct {
 	HTTPSProxy *string `json:"httpsProxy,omitempty"`
 }
 
-// RegistryCacheConfigStatus defines the observed state of RegistryCacheConfig.
-type RegistryCacheConfigStatus struct {
-	// INSERT ADDITIONAL STATUS FIELD - define observed state of cluster
-	// Important: Run "make" to regenerate code after modifying this file
+// HTTP contains settings for the HTTP server that hosts the registry cache.
+type HTTP struct {
+	// TLS indicates whether TLS is enabled for the HTTP server of the registry cache.
+	// Defaults to true.
+	TLS bool
 }
