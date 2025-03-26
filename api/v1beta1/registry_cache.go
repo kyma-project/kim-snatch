@@ -30,7 +30,7 @@ type RegistryCache struct {
 	Proxy *Proxy `json:"proxy,omitempty"`
 
 	// HTTP contains settings for the HTTP server that hosts the registry cache.
-	HTTP *HTTP
+	HTTP *HTTP `json:"http,omitempty"`
 }
 
 // Volume contains settings for the registry cache volume.
@@ -70,5 +70,5 @@ type Proxy struct {
 type HTTP struct {
 	// TLS indicates whether TLS is enabled for the HTTP server of the registry cache.
 	// Defaults to true.
-	TLS bool
+	TLS bool `json:"tls,omitempty"`
 }

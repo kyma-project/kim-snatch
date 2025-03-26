@@ -58,6 +58,16 @@ spec:
                       required:
                       - ttl
                       type: object
+                    http:
+                      description: HTTP contains settings for the HTTP server that
+                        hosts the registry cache.
+                      properties:
+                        tls:
+                          description: |-
+                            TLS indicates whether TLS is enabled for the HTTP server of the registry cache.
+                            Defaults to true.
+                          type: boolean
+                      type: object
                     proxy:
                       description: Proxy contains settings for a proxy used in the
                         registry cache.
