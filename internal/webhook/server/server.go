@@ -169,6 +169,11 @@ func (s *DefaultServer) Start(ctx context.Context) error {
 
 	cfg := &tls.Config{ //nolint:gosec
 		NextProtos: []string{"h2"},
+		CipherSuites: []uint16{
+			tls.TLS_AES_128_GCM_SHA256,
+			tls.TLS_AES_256_GCM_SHA384,
+			tls.TLS_CHACHA20_POLY1305_SHA256,
+		},
 	}
 	// fallback TLS config ready, will now mutate if passer wants full control over it
 	for _, op := range s.Options.TLSOpts {
