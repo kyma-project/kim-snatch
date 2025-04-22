@@ -169,7 +169,7 @@ func (s *DefaultServer) Start(ctx context.Context) error {
 
 	cfg := &tls.Config{ //nolint:gosec
 		NextProtos: []string{"h2"},
-		CipherSuites: []uint16{
+		CipherSuites: []uint16{ //limited to TLS 1.3, see https://pkg.go.dev/crypto/tls
 			tls.TLS_AES_128_GCM_SHA256,
 			tls.TLS_AES_256_GCM_SHA384,
 			tls.TLS_CHACHA20_POLY1305_SHA256,
