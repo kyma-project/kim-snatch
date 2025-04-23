@@ -169,7 +169,9 @@ func (s *DefaultServer) Start(ctx context.Context) error {
 
 	cfg := &tls.Config{ //nolint:gosec
 		NextProtos: []string{"h2"},
+		MinVersion: tls.VersionTLS13,
 	}
+
 	// fallback TLS config ready, will now mutate if passer wants full control over it
 	for _, op := range s.Options.TLSOpts {
 		op(cfg)
