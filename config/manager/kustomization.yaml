@@ -1,11 +1,17 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
+
 resources:
 - manager.yaml
+- priority_class.yaml
+
+patchesStrategicMerge:
+- priority_class_patch.yaml
+
 images:
 - name: controller
-  newName: europe-docker.pkg.dev/kyma-project/prod/kim-snatch
-  newTag: 1.0.1
+  newName: snatch
+  newTag: local
 - name: controller-admission
   newName: IMG=admission-testme
   newTag: latest

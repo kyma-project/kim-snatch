@@ -173,6 +173,38 @@ var _ = Describe("Manager", Ordered, func() {
 			Eventually(verifyControllerUp).Should(Succeed())
 		})
 
+		It("should have priority-class", func() {
+			// Get the name of the controller-manager pod
+			pcName := "kim-snatch-priority-class"
+			cmd := exec.Command("kubectl", "get",
+				"priorityclass", pcName,
+				"-n", namespace,
+			)
+
+			verifyControllerUp := func(g Gomega) {
+				pcOutput, err := utils.Run(cmd)
+				g.Expect(err).NotTo(HaveOccurred(), "Failed to retrieve kim-snatch-priority-class information")
+				g.Expect(pcOutput).To(ContainSubstring(pcName))
+			}
+			Eventually(verifyControllerUp).Should(Succeed())
+		})
+
+		It("should have valid priority-class-name", func() {
+			// Get the name of the controller-manager pod
+			cmd := exec.Command("kubectl", "get", "pod",
+				"-l app.kubernetes.io/component=kim-snatch",
+				"-o", "go-template='{{ range .items }}{{ .spec.priorityClassName  }}{{ end }}'",
+				"-n", namespace,
+			)
+
+			verifyPriorityClassName := func(g Gomega) {
+				pcOutput, err := utils.Run(cmd)
+				g.Expect(err).NotTo(HaveOccurred(), "Failed to retrieve priority-class-name information")
+				g.Expect(pcOutput).To(ContainSubstring("kim-snatch-priority-class"))
+			}
+			Eventually(verifyPriorityClassName).Should(Succeed())
+		})
+
 		It("should ensure the metrics endpoint is serving metrics", func() {
 			By("creating a ClusterRoleBinding for the service account to allow access to metrics")
 			cmd := exec.Command("kubectl", "create", "clusterrolebinding", metricsRoleBindingName,
