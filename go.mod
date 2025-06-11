@@ -1,6 +1,6 @@
 module github.com/kyma-project/kim-snatch
 
-go 1.24.2
+go 1.24.4
 
 require (
 	github.com/go-logr/logr v1.4.2
@@ -11,7 +11,7 @@ require (
 	k8s.io/api v0.33.0
 	k8s.io/apimachinery v0.33.0
 	k8s.io/client-go v0.33.0
-	k8s.io/utils v0.0.0-20250321185631-1f6e0b77f77e
+	k8s.io/utils v0.0.0-20250604170112-4c0f3b243397
 	sigs.k8s.io/controller-runtime v0.20.4
 )
 
