@@ -56,8 +56,9 @@ type RegistryCacheConfigList struct {
 type State string
 
 const (
-	ReadyState State = "Ready"
-	ErrorState State = "Error"
+	ReadyState   State = "Ready"
+	ErrorState   State = "Error"
+	PendingState State = "Pending"
 )
 
 type ConditionReason string
