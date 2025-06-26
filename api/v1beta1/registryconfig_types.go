@@ -32,12 +32,6 @@ type RegistryCacheConfigSpec struct {
 	RegistryCaches []RegistryCache `json:"caches,omitempty"`
 }
 
-// RegistryCacheConfigStatus defines the observed state of RegistryCacheConfig.
-type RegistryCacheConfigStatus struct {
-	// INSERT ADDITIONAL STATUS FIELD - define observed state of cluster
-	// Important: Run "make" to regenerate code after modifying this file
-}
-
 // +kubebuilder:object:root=true
 // +kubebuilder:subresource:status
 
@@ -57,6 +51,35 @@ type RegistryCacheConfigList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
 	Items           []RegistryCacheConfig `json:"items"`
+}
+
+type State string
+
+const (
+	ReadyState State = "Ready"
+	ErrorState State = "Error"
+)
+
+type ConditionReason string
+
+const (
+	ConditionReasonRegistryCacheConfigured     ConditionReason = "RegistryCacheConfigured"
+	ConditionReasonFailedToGetSecret           ConditionReason = "FailedToGetCredentialsSecret"
+	ConditionReasonSecretHasIncorrectStructure ConditionReason = "SecretHasIncorrectStructure"
+	ConditionReasonFailedToResolveRegistryURL  ConditionReason = "FailedToResolveRegistryURL"
+)
+
+type RegistryCacheConfigStatus struct {
+	// State signifies current state of Runtime
+	// +kubebuilder:validation:Required
+	// +kubebuilder:validation:Enum=Pending;Ready;Terminating;Failed
+	State State `json:"state,omitempty"`
+
+	// List of status conditions to indicate the status of a ServiceInstance.
+	Conditions []metav1.Condition `json:"conditions,omitempty"`
+
+	// ProvisioningCompleted indicates if the initial provisioning of the cluster is completed
+	ProvisioningCompleted bool `json:"provisioningCompleted,omitempty"`
 }
 
 func init() {
