@@ -1,7 +1,7 @@
 module-name: kim-snatch
 kind: kyma
 bdba:
-  - europe-docker.pkg.dev/kyma-project/prod/kim-snatch:latest
+  - europe-docker.pkg.dev/kyma-project/prod/kim-snatch:1.0.5
 mend:
   language: golang-mod
   exclude:
