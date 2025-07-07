@@ -29,7 +29,7 @@ type RegistryCacheConfigSpec struct {
 	// Important: Run "make" to regenerate code after modifying this file
 
 	// RegistryCaches stores configuration for registry caches.
-	RegistryCaches []RegistryCache `json:"caches,omitempty"`
+	RegistryCaches RegistryCache `json:"caches,omitempty"`
 }
 
 // +kubebuilder:object:root=true
