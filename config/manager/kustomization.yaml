@@ -10,8 +10,8 @@ patchesStrategicMerge:
 
 images:
 - name: controller
-  newName: europe-docker.pkg.dev/kyma-project/prod/kim-snatch
-  newTag: 1.0.5
+  newName: snatch
+  newTag: local
 - name: controller-admission
   newName: IMG=admission-testme
   newTag: latest
