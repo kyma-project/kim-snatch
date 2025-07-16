@@ -54,4 +54,8 @@ To ensure KIM-Snatch is healthy, monitor two key functions:
     *   **Action:** Check that the `caBundle` field within this configuration matches the `ca.crt` from the `Secret`. A mismatch will cause the API Server to reject calls to the webhook.
 4.  **Review KIM-Snatch Logs:** Check the logs of the KIM-Snatch pod for errors related to reading the certificate or updating the webhook configuration.
 
+## Troubleshooting
+
+Please see the [troubleshoot guide](./troubleshooting.md) of KIM-Snatch.
+
 ---
