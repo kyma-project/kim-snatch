@@ -56,6 +56,6 @@ To ensure KIM-Snatch is healthy, monitor two key functions:
 
 ## Troubleshooting
 
-Please see the [troubleshoot guide](./troubleshooting.md) of KIM-Snatch.
+Please see the [troubleshooting guide](./troubleshooting.md) of KIM-Snatch.
 
 ---
