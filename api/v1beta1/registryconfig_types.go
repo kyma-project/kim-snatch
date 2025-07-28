@@ -17,6 +17,7 @@ limitations under the License.
 package v1beta1
 
 import (
+	"k8s.io/apimachinery/pkg/api/meta"
 	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
@@ -158,4 +159,39 @@ type RegistryCacheConfigStatus struct {
 
 func init() {
 	SchemeBuilder.Register(&RegistryCacheConfig{}, &RegistryCacheConfigList{})
+}
+
+func (rc *RegistryCacheConfig) UpdateStatusPending(conditionType ConditionType, reason ConditionReason) {
+	rc.Status.State = PendingState
+
+	condition := metav1.Condition{
+		Type:   string(conditionType),
+		Reason: string(reason),
+	}
+
+	meta.SetStatusCondition(&rc.Status.Conditions, condition)
+}
+
+func (rc *RegistryCacheConfig) UpdateStatusFailed(conditionType ConditionType, reason ConditionReason, errorMessage string) {
+
+	rc.Status.State = ErrorState
+
+	condition := metav1.Condition{
+		Type:    string(conditionType),
+		Reason:  string(reason),
+		Message: errorMessage,
+	}
+
+	meta.SetStatusCondition(&rc.Status.Conditions, condition)
+}
+
+func (rc *RegistryCacheConfig) UpdateStatusReady(conditionType ConditionType, reason ConditionReason) {
+	rc.Status.State = ReadyState
+
+	condition := metav1.Condition{
+		Type:   string(conditionType),
+		Reason: string(reason),
+	}
+
+	meta.SetStatusCondition(&rc.Status.Conditions, condition)
 }
