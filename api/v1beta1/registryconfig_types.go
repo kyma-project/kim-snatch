@@ -125,14 +125,26 @@ const (
 	PendingState State = "Pending"
 )
 
+type ConditionType string
+
+const (
+	ConditionTypeRegistryCacheValidated  ConditionType = "RegistryCacheValidated"
+	ConditionTypeRegistryCacheConfigured ConditionType = "RegistryCacheConfigured"
+)
+
 type ConditionReason string
 
 const (
-	ConditionReasonRegistryCacheConfigured     ConditionReason = "RegistryCacheConfigured"
-	ConditionReasonFailedToGetSecret           ConditionReason = "FailedToGetCredentialsSecret"
-	ConditionReasonSecretHasIncorrectStructure ConditionReason = "SecretHasIncorrectStructure"
-	ConditionReasonFailedToResolveRegistryURL  ConditionReason = "FailedToResolveRegistryURL"
+	ConditionReasonRegistryCacheValidated        ConditionReason = "RegistryCacheValidated"
+	ConditionReasonRegistryCacheValidationFailed ConditionReason = "RegistryCacheValidationFailed"
+
+	ConditionReasonRegistryCacheConfigured                        ConditionReason = "RegistryCacheConfigured"
+	ConditionReasonRegistryCacheExtensionConfigurationFailed      ConditionReason = "ConditionReasonRegistryCacheExtensionConfigurationFailed"
+	ConditionReasonRegistryCacheCGardenClusterConfigurationFailed ConditionReason = "ConditionReasonRegistryCacheCGardenClusterConfigurationFailed"
+	ConditionReasonRegistryCacheCGardenClusterCleanupFailed       ConditionReason = "ConditionReasonRegistryCacheCGardenClusterConfigurationFailed"
 )
+
+const ()
 
 type RegistryCacheConfigStatus struct {
 	// State signifies current state of Runtime
@@ -142,9 +154,6 @@ type RegistryCacheConfigStatus struct {
 
 	// List of status conditions to indicate the status of a ServiceInstance.
 	Conditions []metav1.Condition `json:"conditions,omitempty"`
-
-	// ProvisioningCompleted indicates if the initial provisioning of the cluster is completed
-	ProvisioningCompleted bool `json:"provisioningCompleted,omitempty"`
 }
 
 func init() {
