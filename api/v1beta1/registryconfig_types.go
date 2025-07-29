@@ -187,12 +187,13 @@ func (rc *RegistryCacheConfig) UpdateStatusFailed(conditionType ConditionType, r
 	meta.SetStatusCondition(&rc.Status.Conditions, condition)
 }
 
-func (rc *RegistryCacheConfig) UpdateStatusReady(conditionType ConditionType, reason ConditionReason) {
+func (rc *RegistryCacheConfig) UpdateStatusReady(conditionType ConditionType, reason ConditionReason, status metav1.ConditionStatus) {
 	rc.Status.State = ReadyState
 
 	condition := metav1.Condition{
 		Type:   string(conditionType),
 		Reason: string(reason),
+		Status: status,
 	}
 
 	meta.SetStatusCondition(&rc.Status.Conditions, condition)
