@@ -139,13 +139,11 @@ const (
 	ConditionReasonRegistryCacheValidated        ConditionReason = "RegistryCacheValidated"
 	ConditionReasonRegistryCacheValidationFailed ConditionReason = "RegistryCacheValidationFailed"
 
-	ConditionReasonRegistryCacheConfigured                        ConditionReason = "RegistryCacheConfigured"
-	ConditionReasonRegistryCacheExtensionConfigurationFailed      ConditionReason = "ConditionReasonRegistryCacheExtensionConfigurationFailed"
-	ConditionReasonRegistryCacheCGardenClusterConfigurationFailed ConditionReason = "ConditionReasonRegistryCacheCGardenClusterConfigurationFailed"
-	ConditionReasonRegistryCacheCGardenClusterCleanupFailed       ConditionReason = "ConditionReasonRegistryCacheCGardenClusterConfigurationFailed"
+	ConditionReasonRegistryCacheConfigured                       ConditionReason = "RegistryCacheConfigured"
+	ConditionReasonRegistryCacheExtensionConfigurationFailed     ConditionReason = "RegistryCacheExtensionConfigurationFailed"
+	ConditionReasonRegistryCacheGardenClusterConfigurationFailed ConditionReason = "RegistryCacheGardenClusterConfigurationFailed"
+	ConditionReasonRegistryCacheGardenClusterCleanupFailed       ConditionReason = "RegistryCacheGardenClusterCFailedCleanupFailed"
 )
-
-const ()
 
 type RegistryCacheConfigStatus struct {
 	// State signifies current state of Runtime
@@ -161,7 +159,19 @@ func init() {
 	SchemeBuilder.Register(&RegistryCacheConfig{}, &RegistryCacheConfigList{})
 }
 
-func (rc *RegistryCacheConfig) UpdateStatusPending(conditionType ConditionType, reason ConditionReason, status metav1.ConditionStatus) {
+func (rc *RegistryCacheConfig) RegistryCacheConfiguredUpdateStatusPendingUnknown(reason ConditionReason) {
+	rc.updateStatusPending(ConditionTypeRegistryCacheConfigured, reason, metav1.ConditionUnknown)
+}
+
+func (rc *RegistryCacheConfig) RegistryCacheConfiguredUpdateStatusFailed(reason ConditionReason, errorMessage string) {
+	rc.updateStatusFailed(ConditionTypeRegistryCacheConfigured, reason, metav1.ConditionFalse, errorMessage)
+}
+
+func (rc *RegistryCacheConfig) RegistryCacheConfiguredUpdateStatusReady(reason ConditionReason) {
+	rc.updateStatusReady(ConditionTypeRegistryCacheConfigured, reason, metav1.ConditionFalse)
+}
+
+func (rc *RegistryCacheConfig) updateStatusPending(conditionType ConditionType, reason ConditionReason, status metav1.ConditionStatus) {
 	rc.Status.State = PendingState
 
 	condition := metav1.Condition{
@@ -173,7 +183,7 @@ func (rc *RegistryCacheConfig) UpdateStatusPending(conditionType ConditionType, 
 	meta.SetStatusCondition(&rc.Status.Conditions, condition)
 }
 
-func (rc *RegistryCacheConfig) UpdateStatusFailed(conditionType ConditionType, reason ConditionReason, status metav1.ConditionStatus, errorMessage string) {
+func (rc *RegistryCacheConfig) updateStatusFailed(conditionType ConditionType, reason ConditionReason, status metav1.ConditionStatus, errorMessage string) {
 
 	rc.Status.State = ErrorState
 
@@ -187,7 +197,7 @@ func (rc *RegistryCacheConfig) UpdateStatusFailed(conditionType ConditionType, r
 	meta.SetStatusCondition(&rc.Status.Conditions, condition)
 }
 
-func (rc *RegistryCacheConfig) UpdateStatusReady(conditionType ConditionType, reason ConditionReason, status metav1.ConditionStatus) {
+func (rc *RegistryCacheConfig) updateStatusReady(conditionType ConditionType, reason ConditionReason, status metav1.ConditionStatus) {
 	rc.Status.State = ReadyState
 
 	condition := metav1.Condition{
