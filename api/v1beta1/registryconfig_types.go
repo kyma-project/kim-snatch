@@ -161,24 +161,26 @@ func init() {
 	SchemeBuilder.Register(&RegistryCacheConfig{}, &RegistryCacheConfigList{})
 }
 
-func (rc *RegistryCacheConfig) UpdateStatusPending(conditionType ConditionType, reason ConditionReason) {
+func (rc *RegistryCacheConfig) UpdateStatusPending(conditionType ConditionType, reason ConditionReason, status metav1.ConditionStatus) {
 	rc.Status.State = PendingState
 
 	condition := metav1.Condition{
 		Type:   string(conditionType),
 		Reason: string(reason),
+		Status: status,
 	}
 
 	meta.SetStatusCondition(&rc.Status.Conditions, condition)
 }
 
-func (rc *RegistryCacheConfig) UpdateStatusFailed(conditionType ConditionType, reason ConditionReason, errorMessage string) {
+func (rc *RegistryCacheConfig) UpdateStatusFailed(conditionType ConditionType, reason ConditionReason, status metav1.ConditionStatus, errorMessage string) {
 
 	rc.Status.State = ErrorState
 
 	condition := metav1.Condition{
 		Type:    string(conditionType),
 		Reason:  string(reason),
+		Status:  status,
 		Message: errorMessage,
 	}
 
