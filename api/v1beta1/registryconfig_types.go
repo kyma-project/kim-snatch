@@ -17,6 +17,7 @@ limitations under the License.
 package v1beta1
 
 import (
+	"k8s.io/apimachinery/pkg/api/meta"
 	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
@@ -125,13 +126,23 @@ const (
 	PendingState State = "Pending"
 )
 
+type ConditionType string
+
+const (
+	ConditionTypeRegistryCacheValidated  ConditionType = "RegistryCacheValidated"
+	ConditionTypeRegistryCacheConfigured ConditionType = "RegistryCacheConfigured"
+)
+
 type ConditionReason string
 
 const (
-	ConditionReasonRegistryCacheConfigured     ConditionReason = "RegistryCacheConfigured"
-	ConditionReasonFailedToGetSecret           ConditionReason = "FailedToGetCredentialsSecret"
-	ConditionReasonSecretHasIncorrectStructure ConditionReason = "SecretHasIncorrectStructure"
-	ConditionReasonFailedToResolveRegistryURL  ConditionReason = "FailedToResolveRegistryURL"
+	ConditionReasonRegistryCacheValidated        ConditionReason = "RegistryCacheValidated"
+	ConditionReasonRegistryCacheValidationFailed ConditionReason = "RegistryCacheValidationFailed"
+
+	ConditionReasonRegistryCacheConfigured                       ConditionReason = "RegistryCacheConfigured"
+	ConditionReasonRegistryCacheExtensionConfigurationFailed     ConditionReason = "RegistryCacheExtensionConfigurationFailed"
+	ConditionReasonRegistryCacheGardenClusterConfigurationFailed ConditionReason = "RegistryCacheGardenClusterConfigurationFailed"
+	ConditionReasonRegistryCacheGardenClusterCleanupFailed       ConditionReason = "RegistryCacheGardenClusterCFailedCleanupFailed"
 )
 
 type RegistryCacheConfigStatus struct {
@@ -142,11 +153,58 @@ type RegistryCacheConfigStatus struct {
 
 	// List of status conditions to indicate the status of a ServiceInstance.
 	Conditions []metav1.Condition `json:"conditions,omitempty"`
-
-	// ProvisioningCompleted indicates if the initial provisioning of the cluster is completed
-	ProvisioningCompleted bool `json:"provisioningCompleted,omitempty"`
 }
 
 func init() {
 	SchemeBuilder.Register(&RegistryCacheConfig{}, &RegistryCacheConfigList{})
+}
+
+func (rc *RegistryCacheConfig) RegistryCacheConfiguredUpdateStatusPendingUnknown(reason ConditionReason) {
+	rc.updateStatusPending(ConditionTypeRegistryCacheConfigured, reason, metav1.ConditionUnknown)
+}
+
+func (rc *RegistryCacheConfig) RegistryCacheConfiguredUpdateStatusFailed(reason ConditionReason, errorMessage string) {
+	rc.updateStatusFailed(ConditionTypeRegistryCacheConfigured, reason, metav1.ConditionFalse, errorMessage)
+}
+
+func (rc *RegistryCacheConfig) RegistryCacheConfiguredUpdateStatusReady(reason ConditionReason) {
+	rc.updateStatusReady(ConditionTypeRegistryCacheConfigured, reason, metav1.ConditionFalse)
+}
+
+func (rc *RegistryCacheConfig) updateStatusPending(conditionType ConditionType, reason ConditionReason, status metav1.ConditionStatus) {
+	rc.Status.State = PendingState
+
+	condition := metav1.Condition{
+		Type:   string(conditionType),
+		Reason: string(reason),
+		Status: status,
+	}
+
+	meta.SetStatusCondition(&rc.Status.Conditions, condition)
+}
+
+func (rc *RegistryCacheConfig) updateStatusFailed(conditionType ConditionType, reason ConditionReason, status metav1.ConditionStatus, errorMessage string) {
+
+	rc.Status.State = ErrorState
+
+	condition := metav1.Condition{
+		Type:    string(conditionType),
+		Reason:  string(reason),
+		Status:  status,
+		Message: errorMessage,
+	}
+
+	meta.SetStatusCondition(&rc.Status.Conditions, condition)
+}
+
+func (rc *RegistryCacheConfig) updateStatusReady(conditionType ConditionType, reason ConditionReason, status metav1.ConditionStatus) {
+	rc.Status.State = ReadyState
+
+	condition := metav1.Condition{
+		Type:   string(conditionType),
+		Reason: string(reason),
+		Status: status,
+	}
+
+	meta.SetStatusCondition(&rc.Status.Conditions, condition)
 }
