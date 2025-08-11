@@ -168,7 +168,7 @@ func (rc *RegistryCacheConfig) RegistryCacheConfiguredUpdateStatusFailed(reason 
 }
 
 func (rc *RegistryCacheConfig) RegistryCacheConfiguredUpdateStatusReady(reason ConditionReason) {
-	rc.updateStatusReady(ConditionTypeRegistryCacheConfigured, reason, metav1.ConditionFalse)
+	rc.updateStatusReady(ConditionTypeRegistryCacheConfigured, reason, metav1.ConditionTrue)
 }
 
 func (rc *RegistryCacheConfig) updateStatusPending(conditionType ConditionType, reason ConditionReason, status metav1.ConditionStatus) {
