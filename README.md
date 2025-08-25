@@ -3,6 +3,7 @@
 [![linter](https://badgen.net/github/checks/kyma-project/kim-snatch/main/run-linter)](https://github.com/kyma-project/kim-snatch/actions/workflows/lint.yml)
 [![controller tests](https://badgen.net/github/checks/kyma-project/kim-snatch/main/controller-tests)](https://github.com/kyma-project/kim-snatch/actions/workflows/tests.yml)
 [![e2e tests](https://badgen.net/github/checks/kyma-project/kim-snatch/main/e2e-tests)](https://github.com/kyma-project/kim-snatch/actions/workflows/tests.yml)
+[![latest release](https://badgen.net/github/release/kyma-project/kim-snatch)](https://github.com/kyma-project/kim-snatch/releases/latest)
 > > **NOTE:** This is a general template that you can use for a project README.md. Except for the mandatory sections, use only those sections that suit your use case but keep the proposed section order.
 >
 > Mandatory sections:
