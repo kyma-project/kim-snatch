@@ -1,8 +1,11 @@
 [![REUSE status](https://api.reuse.software/badge/github.com/kyma-project/kim-snatch)](https://api.reuse.software/info/github.com/kyma-project/kim-snatch)
-
+[![Coverage Status](https://coveralls.io/repos/github/kyma-project/kim-snatch/badge.svg?branch=main)](https://coveralls.io/github/kyma-project/kim-snatch?branch=main)
+[![linter](https://badgen.net/github/checks/kyma-project/kim-snatch/main/run-linter)](https://github.com/kyma-project/kim-snatch/actions/workflows/lint.yml)
+[![controller tests](https://badgen.net/github/checks/kyma-project/kim-snatch/main/controller-tests)](https://github.com/kyma-project/kim-snatch/actions/workflows/tests.yml)
+[![e2e tests](https://badgen.net/github/checks/kyma-project/kim-snatch/main/e2e-tests)](https://github.com/kyma-project/kim-snatch/actions/workflows/tests.yml)
 > > **NOTE:** This is a general template that you can use for a project README.md. Except for the mandatory sections, use only those sections that suit your use case but keep the proposed section order.
 >
-> Mandatory sections: 
+> Mandatory sections:
 > - `Overview`
 > - `Prerequisites`, if there are any requirements regarding hard- or software
 > - `Installation`
