@@ -35,8 +35,8 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       tag: ${{ steps.tag.outputs.tag }}
-      latest: ${{ steps.latest.outputs.latest || '' }}
       tag-experimental: ${{ steps.tag.outputs.tag }}-experimental
+      latest: ${{ steps.latest.outputs.latest || '' }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -60,8 +60,8 @@ jobs:
       context: .
       tags: |
         ${{ needs.setup.outputs.tag }}
-        ${{ needs.setup.outputs.latest }}
         ${{ needs.setup.outputs.tag-experimental }}
+        ${{ needs.setup.outputs.latest }}
 
   summary:
     runs-on: ubuntu-latest
