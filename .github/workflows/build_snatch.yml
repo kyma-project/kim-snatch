@@ -34,8 +34,9 @@ jobs:
       contents: read
     runs-on: ubuntu-latest
     outputs:
-      tag: ${{ steps.tag.outputs.tag }}
-      tag-experimental: ${{ steps.tag.outputs.tag }}-experimental
+      tag: ${{ steps.tag.outputs.tag || '' }}
+      # set to {tag}-experimental if tag is set, otherwise set to empty string
+      tag-experimental: ${{ steps.tag.outputs.tag && format('{0}-experimental', steps.tag.outputs.tag) || '' }}
       latest: ${{ steps.latest.outputs.latest || '' }}
     steps:
       - name: Checkout code
