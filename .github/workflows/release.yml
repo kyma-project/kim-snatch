@@ -60,7 +60,6 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            ./config/crd/crd-docs.md
             ./kim-snatch.yaml
             ./kim-snatch-experimental.yaml
           generate_release_notes: true
