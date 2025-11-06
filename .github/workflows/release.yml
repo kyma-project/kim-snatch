@@ -43,7 +43,7 @@ jobs:
         run: |
           set -e
           make build-installer 
-          cp ./dist/install.yaml registry-cache.yaml
+          cp ./dist/install.yaml kim-snatch.yaml
         env:
           IMG: ${{ needs.setup.outputs.image_registry }}:${{ needs.setup.outputs.tag }}
 
@@ -52,7 +52,7 @@ jobs:
         run: |
           set -e
           make build-installer
-          cp ./dist/install.yaml registry-cache-experimental.yaml
+          cp ./dist/install.yaml kim-snatch-experimental.yaml
         env:
           IMG: ${{ needs.setup.outputs.image_registry }}:${{ needs.setup.outputs.tag_experimental }}
 
@@ -61,9 +61,8 @@ jobs:
         with:
           files: |
             ./config/crd/crd-docs.md
-            ./registry-cache.yaml
-            ./registry-cache-experimental.yaml
-            ./config/samples/default_registry_cache_cr.yaml
+            ./kim-snatch.yaml
+            ./kim-snatch-experimental.yaml
           generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
