@@ -43,7 +43,7 @@ jobs:
         run: |
           set -e
           make build-installer 
-          cp ./dist/install.yaml kim-snatch.yaml
+          cp ./dist/kim-snatch.yaml kim-snatch.yaml
         env:
           IMG: ${{ needs.setup.outputs.image_registry }}:${{ needs.setup.outputs.tag }}
 
