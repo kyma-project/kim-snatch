@@ -1,8 +1,8 @@
 [![REUSE status](https://api.reuse.software/badge/github.com/kyma-project/kim-snatch)](https://api.reuse.software/info/github.com/kyma-project/kim-snatch)
-[![linter](https://badgen.net/github/checks/kyma-project/kim-snatch/main/run-linter)](https://github.com/kyma-project/kim-snatch/actions/workflows/lint.yml)
-[![controller tests](https://badgen.net/github/checks/kyma-project/kim-snatch/main/controller-tests)](https://github.com/kyma-project/kim-snatch/actions/workflows/tests.yml)
-[![e2e tests](https://badgen.net/github/checks/kyma-project/kim-snatch/main/e2e-tests)](https://github.com/kyma-project/kim-snatch/actions/workflows/tests.yml)
-[![latest release](https://badgen.net/github/release/kyma-project/kim-snatch)](https://github.com/kyma-project/kim-snatch/releases/latest)
+[![linter](https://badgers.space/github/checks/kyma-project/kim-snatch/main/run-linter)](https://github.com/kyma-project/kim-snatch/actions/workflows/lint.yml)
+[![controller tests](https://badgers.space/github/checks/kyma-project/kim-snatch/main/controller-tests)](https://github.com/kyma-project/kim-snatch/actions/workflows/tests.yml)
+[![e2e tests](https://badgers.space/github/checks/kyma-project/kim-snatch/main/e2e-tests)](https://github.com/kyma-project/kim-snatch/actions/workflows/tests.yml)
+[![latest release](https://badgers.space/github/release/kyma-project/kim-snatch)](https://github.com/kyma-project/kim-snatch/releases/latest)
 [![Coverage Status](https://coveralls.io/repos/github/kyma-project/kim-snatch/badge.svg?branch=main)](https://coveralls.io/github/kyma-project/kim-snatch?branch=main)
 > > **NOTE:** This is a general template that you can use for a project README.md. Except for the mandatory sections, use only those sections that suit your use case but keep the proposed section order.
 >
