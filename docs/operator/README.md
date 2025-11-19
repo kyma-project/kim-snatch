@@ -14,7 +14,7 @@ The KIM Snatch operator has the following core responsibilities:
 
 1. The Gardener Certificate Management Controller issues a certificate for the webhook and stores it as a Secret in the `kyma-system` namespace. This Secret contains the `ca.crt`.
 2. KIM Snatch watches this specific Secret for creation or update events.
-3. Upon detecting a change, it reads the `ca.crt`.
+3. If it detects a change, it reads the `ca.crt`.
 4. It generates a new webhook configuration, embedding the `ca.crt` into the **clientConfig.caBundle** field of its `MutatingWebhookConfiguration`.
 5. KIM Snatch fetches the current `MutatingWebhookConfiguration` from the API Server.
 6. If the new configuration differs from the active one, it issues an update request to the API Server.
