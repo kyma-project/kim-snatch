@@ -12,7 +12,7 @@ KIM Snatch is part of Kyma Infrastructure Manager (KIM) and functions within the
 It is deployed on all Kyma runtime instances and manages the assignment of Kyma workloads to the mandatory Kyma worker pool present in all Kyma clusters.
 
 In this way, KIM Snatch ensures that Kyma-related workloads, such as operators for Kyma modules, use only the Kyma worker pool. This leaves the full capacity of additional customized worker pools entirely available for user workloads.
-KIM Snatch reduces the risk of incompatibility issues by keeping Kyma container images isolated from customized worker pools
+KIM Snatch reduces the risk of incompatibility issues by keeping Kyma container images isolated from customized worker pools.
 
 ## Technical Approach
 
@@ -26,7 +26,7 @@ Before the Pod is handed over to the Kubernetes scheduler, KIM Snatch adds [`nod
 
 ## Limitations
 
-### Using the Kyma Worker Pool is not Enforced
+### Using the Kyma Worker Pool Is Not Enforced
 Assigning a Pod to a specific worker pool can have the following drawbacks:
 
 * Resources of the preferred worker pool are exhausted, while other worker pools still have free capacities.
@@ -34,14 +34,14 @@ Assigning a Pod to a specific worker pool can have the following drawbacks:
 
 To overcome these limitations, we use `preferredDuringSchedulingIgnoredDuringExecution` so that the configured node affinity on Kyma workloads is a "soft" rule. For more details, see the [Kubernetes documentation](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity). The Kubernetes scheduler prefers the Kyma worker pool. Still, if scheduling the Pod in this pool is impossible, it also considers other worker pools.
 
-### Kyma Workloads are not Intercepted
+### Kyma Workloads Are Not Intercepted
 
-#### Non-Available Webhook is Ignored by Kubernetes
+#### Non-Available Webhook Is Ignored by Kubernetes
 Kubernetes calls can be heavily impacted if a mandatory admission webhook isn't responsive enough. This can lead to timeouts and massive performance degradation.
 
 To prevent such side effects, the KIM Snatch webhook is configured with a [failure tolerating policy](https://kubernetes.io/docs/reference/access-authn-authz/extensible-admission-controllers/#failure-policy), which allows Kubernetes to continue in case of errors. This implies that downtimes or failures of the webhook are accepted, and Pods get scheduled without `nodeAffinity`.
 
-#### Already Scheduled Pods are Ignored by Webhook
+#### Already Scheduled Pods Are Ignored by Webhook
 Additionally, no Pods that are already scheduled and running on a worker node receive `nodeAffinity` because `nodeAffinity` is only allowed to intercept non-scheduled Pods. This means that running Pods must be restarted to receive `nodeAffinity`. This webhook does not restart running Pods to avoid service interruptions or reduced user experience.
 
 ## Contributing
