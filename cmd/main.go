@@ -43,7 +43,6 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/log/zap"
 	metricsserver "sigs.k8s.io/controller-runtime/pkg/metrics/server"
 
-	corev1beta1 "github.com/kyma-project/kim-snatch/api/v1beta1"
 	"github.com/kyma-project/kim-snatch/internal/webhook/callback"
 	webhook "github.com/kyma-project/kim-snatch/internal/webhook/server"
 	webhookcorev1 "github.com/kyma-project/kim-snatch/internal/webhook/v1"
@@ -70,8 +69,6 @@ var (
 func init() {
 	utilruntime.Must(clientgoscheme.AddToScheme(scheme))
 	utilruntime.Must(admissionregistration.AddToScheme(scheme))
-
-	utilruntime.Must(corev1beta1.AddToScheme(scheme))
 	// +kubebuilder:scaffold:scheme
 }
 
