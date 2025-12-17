@@ -1,0 +1,23 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  namespace: kyma-system
+  name: kyma-project.io--kim-snatch-allow-metrics
+  labels:
+    purpose: metrics
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/component: kim-snatch
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              networking.kyma-project.io/metrics-scraping: allowed
+      ports:
+        - protocol: TCP
+          port: 8080
+---
