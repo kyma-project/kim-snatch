@@ -1,9 +1,8 @@
----
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   name: kyma-project.io--kim-snatch-to-dns
-  namespace: kyma-system
+  namespace: system
   labels:
     app.kubernetes.io/name: kim-snatch
     app.kubernetes.io/managed-by: kustomize
@@ -47,4 +46,3 @@ spec:
       app.kubernetes.io/component: kim-snatch
   policyTypes:
     - Egress
----

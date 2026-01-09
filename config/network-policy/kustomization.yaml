@@ -2,3 +2,4 @@ resources:
 - allow-egress-apiserver.yaml
 - allow-egress-dns.yaml
 - allow-ingress-metrics.yaml
+- allow-webhook-traffic.yaml
