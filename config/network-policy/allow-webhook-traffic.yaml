@@ -1,0 +1,24 @@
+# This NetworkPolicy allows ingress traffic to your webhook server running
+# as part of the controller-manager from specific namespaces and pods. CR(s) which uses webhooks
+# will only work when applied in namespaces labeled with 'webhook: enabled'
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-webhook-traffic
+  namespace: kyma-system
+  labels:
+    app.kubernetes.io/name: kim-snatch
+    app.kubernetes.io/managed-by: kustomize
+    purpose: webhook-traffic
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/component: kim-snatch
+  policyTypes:
+    - Ingress
+  ingress:
+    # This allows ingress traffic from any namespace
+    - from: []
+      ports:
+        - port: 443
+          protocol: TCP

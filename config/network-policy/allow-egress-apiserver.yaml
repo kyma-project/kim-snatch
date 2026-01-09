@@ -5,6 +5,8 @@ metadata:
   name: kyma-project.io--kim-snatch-to-apiserver
   namespace: kyma-system
   labels:
+    app.kubernetes.io/name: kim-snatch
+    app.kubernetes.io/managed-by: kustomize
     purpose: apiserver
 spec:
   egress:

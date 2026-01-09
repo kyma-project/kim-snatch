@@ -10,8 +10,8 @@ patchesStrategicMerge:
 
 images:
 - name: controller
-  newName: snatch
-  newTag: local
+  newName: IMG=testme
+  newTag: latest
 - name: controller-admission
   newName: IMG=admission-testme
   newTag: latest

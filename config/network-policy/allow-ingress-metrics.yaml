@@ -5,6 +5,8 @@ metadata:
   namespace: kyma-system
   name: kyma-project.io--kim-snatch-allow-metrics
   labels:
+    app.kubernetes.io/name: kim-snatch
+    app.kubernetes.io/managed-by: kustomize
     purpose: metrics
 spec:
   podSelector:
