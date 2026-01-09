@@ -1,0 +1,23 @@
+# This NetworkPolicy allows ingress traffic to your webhook server running
+# as part of the controller-manager all namespaces on port 443.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: kyma-project.io--allow-webhook-traffic
+  namespace: system
+  labels:
+    app.kubernetes.io/name: kim-snatch
+    app.kubernetes.io/managed-by: kustomize
+    purpose: webhook-traffic
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/component: kim-snatch
+  policyTypes:
+    - Ingress
+  ingress:
+    # This allows ingress traffic from any namespace
+    - from: []
+      ports:
+        - port: 9443
+          protocol: TCP
