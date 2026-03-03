@@ -43,6 +43,14 @@ jobs:
           run-id: ${{ github.run_id }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Download e2e test output artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: test-e2e-output
+          path: ./artifacts
+          run-id: ${{ github.run_id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Create job summary
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

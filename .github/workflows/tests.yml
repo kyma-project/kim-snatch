@@ -96,7 +96,7 @@ jobs:
         uses: actions/upload-artifact@v5
         if: success() || failure()
         with:
-          name: "test-output"
+          name: "test-e2e-output"
           path: "test-e2e-output.txt"
 
       - name: Generate summary
