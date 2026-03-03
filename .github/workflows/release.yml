@@ -1,4 +1,4 @@
-name: Generate and Release CRD Docs and other release artifacts
+name: KIM-Snatch Release
 
 on:
   push:
@@ -6,27 +6,14 @@ on:
       - '*'  # Trigger on tag pushes
 
 jobs:
-  setup:
+  run-release-tests:
     permissions:
       contents: read
-    runs-on: ubuntu-latest
-    outputs:
-      # the tag name (or empty string)
-      tag: ${{ steps.tag.outputs.tag || '' }}
-      # experimental tag derived from tag (or empty string)
-      tag_experimental: ${{ steps.tag.outputs.tag && format('{0}-experimental', steps.tag.outputs.tag) || '' }}
-      image_registry: europe-docker.pkg.dev/kyma-project/prod/kim-snatch
-    steps:
-      - name: Checkout push/tag ref
-        uses: actions/checkout@v5
-
-      - id: tag
-        if: github.event_name == 'push' && github.ref_type == 'tag'
-        run: echo "tag=${{ github.ref_name }}" >> $GITHUB_OUTPUT
+    uses: ./.github/workflows/tests.yml
 
   generate-release:
-    needs: setup
-    if: needs.setup.outputs.tag != ''
+    needs: run-release-tests
+    if: needs.run-release-tests.result == 'success'
     runs-on: ubuntu-latest
     permissions:
       contents: write  # Needed for creating releases and uploading assets
@@ -45,16 +32,15 @@ jobs:
           make build-installer 
           cp ./dist/kim-snatch.yaml kim-snatch.yaml
         env:
-          IMG: ${{ needs.setup.outputs.image_registry }}:${{ needs.setup.outputs.tag }}
+          IMG: europe-docker.pkg.dev/kyma-project/prod/kim-snatch:${{ github.ref_name }}
 
       - name: Generate Release module artifacts for experimental tag release
-        if: needs.setup.outputs.tag_experimental != ''
         run: |
           set -e
           make build-installer
           cp ./dist/kim-snatch.yaml kim-snatch-experimental.yaml
         env:
-          IMG: ${{ needs.setup.outputs.image_registry }}:${{ needs.setup.outputs.tag_experimental }}
+          IMG: europe-docker.pkg.dev/kyma-project/prod/kim-snatch:${{ github.ref_name }}-experimental
 
       - name: Create Release and Generate Notes
         uses: softprops/action-gh-release@v2
@@ -65,3 +51,15 @@ jobs:
           generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  upload-release-report:
+    needs: generate-release
+    if: needs.generate-release.result == 'success'
+    permissions:
+      actions: read
+      contents: read
+    uses: ./.github/workflows/upload-release-report.yaml
+    with:
+      release_version: ${{ github.ref_name }}
+    secrets:
+      RELEASE_LOG_UPLOADER_SA: ${{ secrets.RELEASE_LOG_UPLOADER_SA }}
