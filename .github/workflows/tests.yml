@@ -59,7 +59,7 @@ jobs:
             echo "<details>"
             echo "<summary>click to expand logs</summary>"
             printf '\n```\n'
-            cat test.log
+            cat test-output.txt
             printf '\n```\n'
             echo "</details>"
           } >> $GITHUB_STEP_SUMMARY
@@ -90,7 +90,14 @@ jobs:
         run: |
           go mod tidy
           set -o pipefail
-          make test-e2e | tee test.log
+          make test-e2e | tee test-e2e-output.txt
+
+      - name: Upload e2e-test output artifact
+        uses: actions/upload-artifact@v5
+        if: success() || failure()
+        with:
+          name: "test-output"
+          path: "test-e2e-output.txt"
 
       - name: Generate summary
         if: success() || failure()
@@ -100,7 +107,7 @@ jobs:
             echo "<details>"
             echo "<summary>click to expand logs</summary>"
             printf '\n```\n'
-            cat test.log
+            cat test-e2e-output.txt
             printf '\n```\n'
             echo "</details>"
           } >> $GITHUB_STEP_SUMMARY
