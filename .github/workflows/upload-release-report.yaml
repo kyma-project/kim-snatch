@@ -67,7 +67,8 @@ jobs:
           zip "${REPO}_${RELEASE_VERSION}.zip" \
             run_summary.json \
             jobs_summary.json \
-            ./artifacts/test-output.txt
+            ./artifacts/test-output.txt \
+            ./artifacts/test-e2e-output.txt
 
       - name: Authenticate to GCP
         uses: google-github-actions/auth@v2
