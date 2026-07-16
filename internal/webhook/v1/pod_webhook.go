@@ -40,8 +40,8 @@ type defaultPod = func(*corev1.Pod)
 
 // SetupPodWebhookWithManager registers the webhook for Pod in the manager.
 func SetupPodWebhookWithManager(mgr ctrl.Manager, defdefaultPod defaultPod) error {
-	return ctrl.NewWebhookManagedBy(mgr).For(&corev1.Pod{}).
-		WithDefaulter(&PodCustomDefaulter{defaultPod: defdefaultPod}).
+	return ctrl.NewWebhookManagedBy(mgr, &corev1.Pod{}).
+		WithCustomDefaulter(&PodCustomDefaulter{defaultPod: defdefaultPod}).
 		Complete()
 }
 
