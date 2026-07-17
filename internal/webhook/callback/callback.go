@@ -63,7 +63,7 @@ func BuildUpdateCABundle(
 
 		logger.Info("attempting to patch mutating webhook configuration", "name", mWhCfg.Name)
 
-		return rtClient.Patch(patchCtx, &mWhCfg, client.Apply, &client.PatchOptions{
+		return rtClient.Patch(patchCtx, &mWhCfg, client.Apply, &client.PatchOptions{ //nolint:staticcheck
 			FieldManager: opts.FieldManager,
 			Force:        ptr.To(true),
 		})
