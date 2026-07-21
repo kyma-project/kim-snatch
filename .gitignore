@@ -13,6 +13,9 @@ Dockerfile.cross
 # Output of the go coverage tool, specifically when used with LiteIDE
 *.out
 
+# test certificate files
+*.cer
+
 # Go workspace file
 go.work
 
@@ -28,3 +31,6 @@ go.work
 
 # installer output
 dist
+
+# vendor directory
+vendor

@@ -7,9 +7,9 @@ on:
 
 jobs:
   run-release-tests:
+    uses: ./.github/workflows/tests.yml
     permissions:
       contents: read
-    uses: ./.github/workflows/tests.yml
 
   generate-release:
     needs: run-release-tests
