@@ -33,4 +33,7 @@ go.work
 dist
 
 # vendor directory
+# Kubernetes Generated files - skip generated files, except for vendored files
+# vendor directory
 vendor
+!vendor/**/zz_generated.*
