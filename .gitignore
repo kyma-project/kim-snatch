@@ -15,6 +15,7 @@ Dockerfile.cross
 
 # test certificate files
 *.cer
+*.crt
 
 # Go workspace file
 go.work
