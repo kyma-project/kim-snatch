@@ -24,10 +24,6 @@ on:
       - .gitignore
       - "**.md"
 
-permissions:
-  id-token: write # This is required for requesting the JWT token
-  contents: read # This is required for actions/checkout
-
 jobs:
   gate:
     runs-on: ubuntu-latest
@@ -66,6 +62,10 @@ jobs:
     name: run-image-builder
     needs: [setup, gate]
     if: ${{ !cancelled() && needs.setup.result == 'success' && (needs.gate.result == 'success' || needs.gate.result == 'skipped') }}
+    permissions:
+      id-token: write # This is required for requesting the JWT token
+      contents: read
+
     uses: kyma-project/test-infra/.github/workflows/image-builder.yml@main
     with:
       name: kim-snatch
