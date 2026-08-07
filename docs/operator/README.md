@@ -6,11 +6,11 @@ The KIM Snatch operator has the following core responsibilities:
 
 ## General Architecture
 
-![Data Model for Certificate and Webhook](./assets/block_diagram.drawio.svg)
+![Data Model for Certificate and Webhook](./assets/block_diagram.drawio.png)
 
 ## `MutatingWebhookConfiguration` Management
 
-![Webhook Configuration Update Flow](./assets/regenerate_webhook_configuration.drawio.svg)
+![Webhook Configuration Update Flow](./assets/regenerate_webhook_configuration.drawio.png)
 
 1. The Gardener Certificate Management Controller issues a certificate for the webhook and stores it as a Secret in the `kyma-system` namespace. This Secret contains the `ca.crt`.
 2. KIM Snatch watches this specific Secret for creation or update events.
@@ -23,7 +23,7 @@ The KIM Snatch operator has the following core responsibilities:
 
 KIM Snatch uses its configured webhook to implement a custom scheduling policy. It specifically targets Kyma workloads to ensure they are scheduled on appropriate nodes.
 
-![Pod Mutation Flow](./assets/webhook.drawio.svg)
+![Pod Mutation Flow](./assets/webhook.drawio.png)
 
 1. A REST Client sends a request to the API Server to create a new object.
 2. If the object is a Pod, the API Server sends an admission request to the KIM Snatch webhook endpoint.
