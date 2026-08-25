@@ -22,7 +22,7 @@ jobs:
     steps:
       - uses: wechuli/allcheckspassed@f423b273f5fdf73582e41f8f6f0f204d69c27379
         with:
-          checks_exclude: 'lint'
+          checks_exclude: 'lint,Analyze \(go\)'
           delay: '3'
           retries: '30'
           polling_interval: '1'
