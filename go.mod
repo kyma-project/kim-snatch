@@ -1,6 +1,6 @@
 module github.com/kyma-project/kim-snatch
 
-go 1.27
+go 1.27.1
 
 require (
 	github.com/go-logr/logr v1.4.4
