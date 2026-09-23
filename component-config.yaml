@@ -1,4 +1,4 @@
-name: kyma-project.io/kyma-runtime/kyma-components/kim-snatch
+name: kyma-project.io/module/kim-snatch
 team: kyma/framefrog
 images:
   - europe-docker.pkg.dev/kyma-project/prod/kim-snatch:latest
