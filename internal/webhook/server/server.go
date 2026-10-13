@@ -104,6 +104,13 @@ type DefaultServer struct {
 	mu sync.Mutex
 
 	webhookMux *http.ServeMux
+
+	// healthCheckTrustPool is the x509 cert pool used by StartedChecker to verify
+	// the TLS connection to the local webhook server. It is populated during Start
+	// when file-backed certificates are used. When TLSOpts supplies GetCertificate
+	// (in-memory certs), this remains nil and StartedChecker falls back to
+	// InsecureSkipVerify for the local health-check dial.
+	healthCheckTrustPool *x509.CertPool
 }
 
 // setDefaults does defaulting for the Server.
@@ -199,6 +206,18 @@ func (s *DefaultServer) Start(ctx context.Context) error {
 		}
 
 		go startWatcher()
+
+		// Build a trust pool from the server cert so StartedChecker can verify
+		// the TLS connection without skipping verification.
+		certBytes, err := os.ReadFile(certPath)
+		if err != nil {
+			return fmt.Errorf("webhook server: failed to read server cert for health check: %w", err)
+		}
+		pool := x509.NewCertPool()
+		pool.AppendCertsFromPEM(certBytes)
+		s.mu.Lock()
+		s.healthCheckTrustPool = pool
+		s.mu.Unlock()
 	}
 
 	// Load CA to verify client certificate, if configured.
@@ -263,19 +282,24 @@ func (s *DefaultServer) StartedChecker() healthz.Checker {
 			return fmt.Errorf("webhook server has not been started yet")
 		}
 
-		// Load the server's own certificate to use as the trusted CA root,
-		// so the health check can verify the TLS connection without skipping verification.
-		certPool := x509.NewCertPool()
-		certPath := filepath.Join(s.Options.CertDir, s.Options.CertName)
-		certBytes, err := os.ReadFile(certPath)
-		if err != nil {
-			return fmt.Errorf("webhook server health check: failed to read server cert: %w", err)
-		}
-		certPool.AppendCertsFromPEM(certBytes)
-
+		// Build the TLS config for the local health-check dial.
+		// ServerName is set to "localhost" because we always connect to the
+		// local listener; without it, certificate identity verification fails
+		// when Host is empty (bound to all interfaces).
+		//
+		// If the server uses file-backed certificates, healthCheckTrustPool was
+		// populated during Start and we can perform full verification.
+		// When TLSOpts supplies GetCertificate (in-memory/callback cert), the
+		// pool is nil and we fall back to InsecureSkipVerify for the local dial
+		// only – the public TLS handshake is still fully verified by clients.
 		config := &tls.Config{
-			RootCAs:    certPool,
+			ServerName: "localhost",
 			MinVersion: tls.VersionTLS13,
+		}
+		if s.healthCheckTrustPool != nil {
+			config.RootCAs = s.healthCheckTrustPool
+		} else {
+			config.InsecureSkipVerify = true //nolint:gosec // localhost-only health-check dial; cert verified by real clients
 		}
 
 		d := &net.Dialer{Timeout: 10 * time.Second}
