@@ -5,9 +5,14 @@ on:
     - cron: '0 0 * * *'  # Runs daily at midnight
   workflow_dispatch: # Allows manual triggering of the workflow
 
+permissions: read-all
+
 jobs:
   stale:
     runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
     steps:
       - uses: actions/stale@v10
         with:
