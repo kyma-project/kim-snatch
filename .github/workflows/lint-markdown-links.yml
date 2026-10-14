@@ -1,9 +1,7 @@
 name: Documentation
 run-name: ${{github.event.pull_request.title}}
 on: [ pull_request ]
-
-permissions:
-  contents: read
+permissions: read-all
 
 jobs:
   markdown-link-check:

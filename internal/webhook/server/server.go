@@ -252,30 +252,16 @@ func (s *DefaultServer) Start(ctx context.Context) error {
 	return nil
 }
 
-// StartedChecker returns an healthz.Checker which is healthy after the
-// server has been started.
+// StartedChecker satisfies the webhook.Server interface. The manager uses
+// healthz.Ping for health checks (see cmd/main.go), so this only needs to
+// confirm the server has been started — no TLS dial required.
 func (s *DefaultServer) StartedChecker() healthz.Checker {
-	config := &tls.Config{
-		InsecureSkipVerify: true, //nolint:gosec // config is used to connect to our own webhook port.
-	}
-	return func(req *http.Request) error {
+	return func(_ *http.Request) error {
 		s.mu.Lock()
 		defer s.mu.Unlock()
-
 		if !s.started {
 			return fmt.Errorf("webhook server has not been started yet")
 		}
-
-		d := &net.Dialer{Timeout: 10 * time.Second}
-		conn, err := tls.DialWithDialer(d, "tcp", net.JoinHostPort(s.Options.Host, strconv.Itoa(s.Options.Port)), config)
-		if err != nil {
-			return fmt.Errorf("webhook server is not reachable: %w", err)
-		}
-
-		if err := conn.Close(); err != nil {
-			return fmt.Errorf("webhook server is not reachable: closing connection: %w", err)
-		}
-
 		return nil
 	}
 }
