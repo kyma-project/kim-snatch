@@ -22,11 +22,13 @@ on:
 
 permissions:
   contents: read
-  checks: write
 
 jobs:
   controller-tests:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      checks: write
     steps:
       - name: Clone the code
         uses: actions/checkout@v7
