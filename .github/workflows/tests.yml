@@ -20,7 +20,10 @@ on:
       - .gitignore
       - "**.md"
 
-permissions: read-all
+permissions:
+  contents: read
+  checks: write
+  actions: write
 
 jobs:
   controller-tests:
