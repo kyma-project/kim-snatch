@@ -20,11 +20,15 @@ on:
       - .gitignore
       - "**.md"
 
-permissions: read-all
+permissions:
+  contents: read
 
 jobs:
   controller-tests:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      checks: write
     steps:
       - name: Clone the code
         uses: actions/checkout@v7
