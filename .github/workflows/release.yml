@@ -10,7 +10,6 @@ jobs:
     permissions:
       contents: read
       checks: write
-      actions: write
     uses: ./.github/workflows/tests.yml
 
   generate-release:
